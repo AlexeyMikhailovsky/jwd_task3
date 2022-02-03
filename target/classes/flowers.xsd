@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.example.com/flowers"
+        xmlns:tns="http://www.example.com/flowers"
+        elementFormDefault="qualified">
+
+
+    <element name="plant" type="tns:Plant" abstract="true"/>
+    <element name="tree" type="tns:Tree" substitutionGroup="tns:plant"/>
+    <element name="flower" type="tns:Flower" substitutionGroup="tns:plant"/>
+
+    <element name="plants">
+        <complexType>
+            <sequence>
+                <element ref="tns:plant" maxOccurs="unbounded"></element>
+            </sequence>
+        </complexType>
+    </element>
+
+  <complexType name="Plant">
+      <sequence>
+          <element name="name" type="string"></element>
+          <element name="soil" type="tns:Soil"></element>
+          <element name="visual-parameters" type="tns:VisualParameters"></element>
+          <element name="growing-tips" type="tns:GrowingTips"></element>
+          <element name="multiplying" type="tns:Multiplying"></element>
+      </sequence>
+      <attribute name="origin" type="tns:Origin" use="required"></attribute>
+      <attribute name="id" type="tns:PlantId" use="required"/>
+  </complexType>
+
+  <complexType name="VisualParameters">
+      <sequence>
+          <element name="stem-color" type="tns:Color" default="green"/>
+          <element name="leaf-color" type="tns:Color" default="green"/>
+          <element name="average-size" type="tns:Size"/>
+      </sequence>
+  </complexType>
+    
+   <complexType name="GrowingTips">
+       <sequence>
+           <element name="temperature" type="tns:Temperature"/>
+           <element name="lighting" type="tns:Lighting"/>
+           <element name="watering" type="tns:Watering"/>
+       </sequence>
+   </complexType>
+
+    <simpleType name="Color">
+        <restriction base="string">
+            <enumeration value="colorless"/>
+            <enumeration value="red"/>
+            <enumeration value="orange"/>
+            <enumeration value="yellow"/>
+            <enumeration value="green"/>
+            <enumeration value="blue"/>
+            <enumeration value="navy"/>
+            <enumeration value="purple"/>
+            <enumeration value="pink"/>
+            <enumeration value="white"/>
+            <enumeration value="brown"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="Multiplying">
+        <restriction base="string">
+            <enumeration value="leaves"/>
+            <enumeration value="cuttings"/>
+            <enumeration value="seeds"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="Soil">
+        <restriction base="string">
+            <enumeration value="podzolic"/>
+            <enumeration value="sod-podzolic"/>
+            <enumeration value="unpaved"/>
+        </restriction>
+    </simpleType>
+    
+    <simpleType name="Watering">
+        <restriction base="string">
+            <pattern value="(\d+).?(\d*)\s*(ml\/w)"/>
+        </restriction>
+    </simpleType>
+    
+    <simpleType name="PlantId">
+        <restriction base="ID">
+            <pattern value="plant-\d{1,10}"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="Lighting">
+        <restriction base="string">
+            <enumeration value="photophilous"/>
+            <enumeration value="not-photophilous"/>
+        </restriction>
+    </simpleType>
+    
+    <simpleType name="Temperature">
+        <restriction base="string">
+            <pattern value="[\d]*[,.]?[\d]* [CFK]"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="Origin">
+        <restriction base="string">
+            <pattern value="[a-zA-Z]{2,}"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="Size">
+        <restriction base="string">
+            <pattern value="(\d+).?(\d*)\s*(m|cm)"/>
+        </restriction>
+    </simpleType>
+
+    <complexType name="Tree">
+        <complexContent>
+            <extension base="tns:Plant">
+                <attribute name="crown-width" type="tns:Size" use="required"/>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="Flower">
+        <complexContent>
+            <extension base="tns:Plant">
+                <attribute name="petal-number" type="int" use="required"/>
+            </extension>
+        </complexContent>
+    </complexType>
+</schema>
